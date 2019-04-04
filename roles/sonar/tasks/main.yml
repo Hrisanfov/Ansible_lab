@@ -1,0 +1,26 @@
+---
+# tasks file for sonar
+- name: Sonar install
+  shell: |
+    systemctl restart postgresql
+    cd /opt
+    wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-{{ sonar_version }}.zip
+    unzip sonarqube-{{ sonar_version }}.zip
+    chown -R {{ sonar_user }}:{{ sonar_group }} sonarqube-{{ sonar_version }}/
+
+#- name: copy sonar config
+#  copy:
+#    src: sonar.properties
+#    dest: /opt/sonarqube-7.6/conf/sonar.properties
+
+- name: Sonar install
+  shell: /opt/sonarqube-{{ sonar_version }}/bin/linux-x86-64/sonar.sh start
+  become: yes
+  become_user: "{{ sonar_user }}"
+  notify:
+  - save details
+    
+- name: copy nginx config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf

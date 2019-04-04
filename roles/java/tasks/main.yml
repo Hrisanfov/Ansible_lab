@@ -1,0 +1,23 @@
+---
+# tasks file for java
+- name: prepare to install
+  yum:
+    name:
+    - yum-utils
+    - epel-release
+    - net-tools
+    - java
+    - unzip
+    - java-{{ java_version }}-openjdk-devel
+    state: latest
+  become: yes
+
+- name: Java Version
+  shell: java -version 2>&1 | grep version | awk '{print $3}' | sed 's/[^0-9._]//g'
+  register: java_version
+
+- name: Java Build
+  shell: java -version 2>&1 | grep "Server VM .build"
+  register: java_build
+  notify:
+    - save details

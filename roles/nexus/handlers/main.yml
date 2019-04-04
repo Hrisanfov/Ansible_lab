@@ -1,0 +1,18 @@
+---
+# handlers file for nexus
+- name: start nexus
+  service:
+    name: nexus
+    state: started
+    enabled: yes
+
+- name: save details
+  copy:
+    content: >
+      {
+        "installed": "{{ ansible_date_time.iso8601 }}",
+        "nexus_user": "{{ nexus_user }}"
+        "nexus_group": "{{ nexus_group }}"
+      }
+    dest: /etc/ansible/facts.d/nexus.fact
+  become: yes

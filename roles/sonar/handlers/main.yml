@@ -1,0 +1,12 @@
+---
+# handlers file for sonar
+- name: save details
+  copy:
+    content: >
+      {
+        "installed": "{{ ansible_date_time.iso8601 }}",
+        "sonar_user": "{{ sonar_user }}"
+        "sonar_group": "{{ sonar_group }}"
+      }
+    dest: /etc/ansible/facts.d/sonar.fact
+  become: yes

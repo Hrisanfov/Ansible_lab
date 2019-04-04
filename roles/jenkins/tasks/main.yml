@@ -1,0 +1,29 @@
+---
+# tasks file for jenkins
+- name: Create /opt/jenkins directory
+  file:
+    path: /opt/jenkins
+    state: directory
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: 0755
+  args:
+    creates: /opt/jenkins/jenkins.war
+
+- name: copy jenkins
+  copy:
+    src: jenkins.war
+    dest: /opt/jenkins/jenkins.war
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: 0755
+
+- name: deploy Systemd File
+  template:
+    src: jenkins.service.j2
+    dest: /etc/systemd/system/jenkins.service
+  notify:
+    - systemd daemon reload
+    - start jenkins
+    - save details
+  become: yes

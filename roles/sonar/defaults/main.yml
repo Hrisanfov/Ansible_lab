@@ -1,0 +1,5 @@
+---
+# defaults file for sonar
+sonar_user: sonar
+sonar_group: sonar
+sonar_version: 7.6

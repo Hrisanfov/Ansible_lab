@@ -1,0 +1,6 @@
+---
+# defaults file for jenkins
+jenkins_user: jenkins
+jenkins_group: jenkins
+jenkins_xmx: "3000"
+jenkins_xms: "1000" 

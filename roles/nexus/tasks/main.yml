@@ -1,0 +1,52 @@
+---
+# tasks file for nexus
+- name: download nexus
+  get_url:
+    url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+    dest: /tmp/latest-unix.tar.gz
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+
+- name: Unarchive nexus
+  unarchive:
+    src: /tmp/latest-unix.tar.gz
+    dest: /opt/
+    remote_src: yes
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+  args:
+    creates: /opt/nexus-3.15.2-01/NOTICE.txt
+
+- name: prepare to start nexus
+  file:
+    path:
+    - /opt/nexus-3.15.2-01
+    - /opt/sonatype-work
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    mode: 0755
+#  shell: chown -R jenkins:jenkins /opt/nexus-3.15.2-01
+
+- name: copy nginx config
+  copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+
+- name: copy systemd nexus
+  copy:
+    src: nexus.service
+    dest: /etc/systemd/system/nexus.service
+    owner: "{{ nexus_user }}"
+    group: "{{ nexus_group }}"
+    mode: 0755
+  notify: start nexus
+
+- name: deploy Systemd File
+  template:
+    src: nexus.service.j2
+    dest: /etc/systemd/system/nexus.service
+  notify:
+    - systemd daemon reload
+    - start nexus
+    - save details
+  become: yes

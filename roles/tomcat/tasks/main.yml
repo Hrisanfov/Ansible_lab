@@ -1,0 +1,44 @@
+---
+# tasks file for tomcat
+- name: download tomcat
+  get_url:
+    url: http://ftp.byfly.by/pub/apache.org/tomcat/tomcat-8/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz
+    dest: /tmp/apache-tomcat-{{ tomcat_version }}.tar.gz
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group}}"
+
+- name: Create directory
+  file:
+    path: /opt/tomcat/
+    state: directory
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group}}"
+
+- name: Unarchive tomcat
+  unarchive:
+    src: /tmp/apache-tomcat-{{ tomcat_version }}.tar.gz
+    dest: /opt/tomcat/
+    remote_src: yes
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group}}"
+    mode: 0755
+
+- name: change ownership
+  file:
+    path: /opt/tomcat/apache-tomcat-{{ tomcat_version }}/
+    owner: "{{ tomcat_user }}"
+    group: "{{ tomcat_group}}"
+  notify:
+    - deploy Systemd File
+    - copy nginx config
+    - start tomcat
+    - save details
+
+- name: Ensure Tomcat Service Running and Enabled
+  service: name=tomcat state=started enabled=yes
+  become: yes
+
+- name: Check if Tomcat Process Running
+  shell: ps -eo cmd | grep -v grep | grep "tomcat"
+  args:
+    warn: false

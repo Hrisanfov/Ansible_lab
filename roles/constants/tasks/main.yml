@@ -1,0 +1,8 @@
+---
+# tasks file for constants
+- name: Ensure Facts Directory Exists
+  file:
+    path: /etc/ansible/facts.d
+    recurse: yes
+    state: directory
+  become: yes

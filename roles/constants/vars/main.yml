@@ -1,0 +1,19 @@
+---
+# tasks file for constants
+users:
+  jenkins:
+    uid: 1000
+    gid: 1000
+    privileges: true
+  nexus:
+    uid: 1010
+    gid: 1010
+    privileges: false
+  sonar:
+    uid: 1020
+    gid: 1020
+    privileges: false
+  tomcat:
+    uid: 1030
+    gid: 1030
+    privileges: false

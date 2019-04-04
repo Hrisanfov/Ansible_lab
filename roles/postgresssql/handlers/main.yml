@@ -1,0 +1,14 @@
+---
+# handlers file for postgresssql
+- name: create_user
+  shell: |
+    sudo -u postgres -H -- psql  -c "create user sonar"
+    sudo -u postgres -H -- psql  -c "alter role sonar with createdb;"
+    sudo -u postgres -H -- psql  -c "alter user sonar with encrypted password 'sonar'"
+    sudo -u postgres -H -- psql  -c "create database sonar owner sonar"
+    sudo -u postgres -H -- psql  -c "grant all privileges on database sonar to sonar"
+- name: restart_postgres
+  service:
+    name: postgresql
+    state: restarted
+  become: yes

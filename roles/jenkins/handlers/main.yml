@@ -1,0 +1,20 @@
+---
+# handlers file for jenkins
+- name: start jenkins
+  service:
+    name: jenkins
+    state: started
+    enabled: yes
+
+- name: save details
+  copy:
+    content: >
+      {
+        "installed": "{{ ansible_date_time.iso8601 }}",
+        "java_xmx": "{{ jenkins_xmx }}",
+        "java_xms": "{{ jenkins_xms }}",
+        "jenkins_user": "{{ jenkins_user }}"
+        "jenkins_group": "{{ jenkins_group }}"
+      }
+    dest: /etc/ansible/facts.d/jenkins.fact
+  become: yes

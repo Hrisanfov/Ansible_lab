@@ -1,0 +1,24 @@
+- name: Installing
+  hosts: all
+  become: yes
+  roles:
+  - java
+  - user
+  - nginx
+
+- hosts: jenkins
+  roles:
+  - jenkins
+
+- hosts: sonar
+  roles:
+  - sonar
+  - postgresssql
+
+- hosts: nexus
+  roles:
+  - nexus
+
+- hosts: tomcat
+  roles:
+  - tomcat

@@ -1,0 +1,11 @@
+[jenkins]
+192.168.56.100 
+[sonar]
+192.168.56.101
+[nexus]
+192.168.56.102
+[tomcat]
+192.168.56.103 
+[all:vars]
+ansible_user=root 
+ansible_ssh_pass=vagrant 

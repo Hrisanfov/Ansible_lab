@@ -1,0 +1,4 @@
+---
+# defaults file for nexus
+nexus_user: nexus
+nexus_group: nexus  
