@@ -7,13 +7,15 @@
       - postgresql-contrib
     state: present
   become: yes
-  
+
 - name: initial db
   shell: |
     postgresql-setup initdb
   args:
     creates:  /var/lib/pgsql/data/postgresql.conf
   become: yes
+  notify:
+    - create_user
 
 - name: start_postgres
   systemd:
@@ -21,6 +23,3 @@
     state: started
     enabled: yes
   become: yes
-  notify:
-    - create_user
-    - restart_postgres

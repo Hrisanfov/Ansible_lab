@@ -7,8 +7,3 @@
     sudo -u postgres -H -- psql  -c "alter user sonar with encrypted password 'sonar'"
     sudo -u postgres -H -- psql  -c "create database sonar owner sonar"
     sudo -u postgres -H -- psql  -c "grant all privileges on database sonar to sonar"
-- name: restart_postgres
-  service:
-    name: postgresql
-    state: restarted
-  become: yes

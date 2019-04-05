@@ -1,0 +1,5 @@
+---
+# defaults file for deploy
+tomcat_user: tomcat
+tomcat_group: tomcat
+build: "48"

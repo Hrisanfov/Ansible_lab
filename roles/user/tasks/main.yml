@@ -6,10 +6,12 @@
     comment:
     uid: "{{ users[username].uid }}"
     gid: "{{ users[username].gid }}"
+    group: "{{ var }}"
 
 - name: add to sudoers
   become: yes
   copy:
     dest: /etc/sudoers.d/{{ username }}
     content: "{{ username }}       ALL=(ALL)       NOPASSWD: ALL"
-  when: "{{ users[username].privileges }} == 'true'"
+  when:  users[username].privileges == true
+#when: "{{ users[username].privileges }} == 'true'"

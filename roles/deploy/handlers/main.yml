@@ -1,0 +1,10 @@
+---
+# handlers file for deploy
+- name: save details
+  copy:
+    content: >
+      {
+        "tomcat_stable_id": "{{ tomcat_stable_id }}",
+      }
+    dest: /etc/ansible/facts.d/deploy.fact
+  become: yes

@@ -1,0 +1,40 @@
+---
+# tasks file for deploy
+- name: Create or check directory
+  become: yes
+  file:
+    path: /tmp/
+    state: directory
+    mode: 0755
+
+- name: deploy to tomcat
+  block:
+  - deploy:
+      build_number: "{{ build }}"
+      user: "{{ tomcat_user }}"
+      password: "{{ tomcat_user }}"
+      tag: "{{ deploy_new_war_tag.stdout }}"
+      set_fact:
+        tomcat_stable_id: "{{deploy_new_war_tag.stdout}}"
+
+- name: save details
+  copy:
+    src: /tmp/helloworld-ws/target/helloworld-ws.war
+    dest: /etc/ansible/facts.d/
+  become: yes
+
+- name: check health
+  uri:
+    url: http://192.168.56.103/helloworld-ws
+    return_content: yes
+  register: this
+  failed_when: "'helloworld' not in this.content"
+  notify:
+    - save details
+
+- name: deploy previous build
+  block:
+  - deploy:
+      user: "{{ tomcat_user }}"
+      password: "{{ tomcat_user }}"
+      tag: "{{ ansible_local.deploy.tomcat_stable_id }}"
